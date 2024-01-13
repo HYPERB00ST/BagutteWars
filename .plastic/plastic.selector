@@ -1,4 +1,0 @@
-repository "Pirate Jam@HYPERB00ST@cloud"
-  path "/"
-    br "/main"
-    co "/main"

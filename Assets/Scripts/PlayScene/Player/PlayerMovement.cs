@@ -3,33 +3,60 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Player {
-    public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
+{
+    [SerializeField] private CharacterController playerController;
+    [SerializeField] private float movementSpeed;
+    [SerializeField] private float rotationSmoothTime = 0.1f;
+
+    private Vector3 moveDirection;
+    private float rotationVelocity;
+
+    void Start()
     {
-        [SerializeField] private CharacterController playerController;
-        [SerializeField] private float movementSpeed;
-        Vector3 MoveX;
-        Vector3 MoveY;
-        Vector3 FinalMove;
-        
-        void Start()
+        if (playerController == null)
         {
-
+            Debug.LogError("CharacterController is not assigned. Please assign it in the inspector.");
         }
+    }
 
-        void Update()
+    void Update()
+    {
+        if (playerController != null)
         {
+            RotatePlayerModelToMouse();
             MovePlayer();
         }
+    }
 
-        private void MovePlayer()
+    private void RotatePlayerModelToMouse()
+    {
+        Plane playerPlane = new Plane(Vector3.up, transform.position);
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        if (playerPlane.Raycast(ray, out float hitdist))
         {
-            MoveX = Input.GetAxis("Horizontal") * transform.right;
-            MoveY = Input.GetAxis("Vertical") * transform.forward;
+            Vector3 targetPoint = ray.GetPoint(hitdist);
+            targetPoint.y = transform.position.y;
 
-            FinalMove = Time.deltaTime * movementSpeed * (MoveX + MoveY);
+            Quaternion targetRotation = Quaternion.LookRotation(targetPoint - transform.position);
 
-            playerController.Move(FinalMove);
+            float currentAngle = gameObject.transform.eulerAngles.y;
+            float targetAngle = targetRotation.eulerAngles.y;
+
+            float angle = Mathf.SmoothDampAngle(currentAngle, targetAngle, ref rotationVelocity, rotationSmoothTime);
+
+            gameObject.transform.rotation = Quaternion.Euler(0, angle, 0);
         }
-    }   
+    }
+
+    private void MovePlayer()
+    {
+        float moveX = Input.GetAxis("Horizontal");
+        float moveY = Input.GetAxis("Vertical");
+
+        moveDirection = movementSpeed * Time.deltaTime * (moveX * Vector3.right + moveY * Vector3.forward);
+
+        playerController.Move(moveDirection);
+    }
 }

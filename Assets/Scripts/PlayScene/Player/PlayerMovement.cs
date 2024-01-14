@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private CharacterController playerController;
+    private CharacterController playerController;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSmoothTime = 0.1f;
     [SerializeField] private float jumpHeight = 2.0f;
@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        playerController = GetComponent<CharacterController>();
         if (playerController == null)
         {
             Debug.LogError("CharacterController is not assigned. Please assign it in the inspector.");
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
         {
             RotatePlayerModelToMouse();
             MovePlayer();
+            
 
             if (isTouchingGround && Input.GetButtonDown("Jump"))
             {

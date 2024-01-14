@@ -8,9 +8,7 @@ public class CameraMovement : MonoBehaviour
     public Vector3 offset;
     public float smoothSpeed = 0.125f;
     public Vector3 rotation;
-    public float zoomSpeed = 10.0f;
-    public float minZoom = 30.0f;
-    public float maxZoom = 90.0f;
+
 
     private Camera cam;
 
@@ -31,10 +29,9 @@ public class CameraMovement : MonoBehaviour
             Quaternion smoothedRotation = Quaternion.Lerp(transform.rotation, desiredRotation, smoothSpeed);
             transform.rotation = smoothedRotation;
 
-            // Zoom in and out with the mouse wheel
-            float scrollData = Input.GetAxis("Mouse ScrollWheel");
+            /* float scrollData = Input.GetAxis("Mouse ScrollWheel");
             cam.fieldOfView -= scrollData * zoomSpeed;
-            cam.fieldOfView = Mathf.Clamp(cam.fieldOfView, minZoom, maxZoom);
+            cam.fieldOfView = Mathf.Clamp(cam.fieldOfView, minZoom, maxZoom); */
         }
     }
 }

@@ -5,15 +5,19 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private CharacterController playerController;
+    private CharacterController playerController;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSmoothTime = 0.1f;
+    [SerializeField] private float jumpHeight = 2.0f;
+    [SerializeField] private float gravity = -9.81f;
+    private bool isTouchingGround;
 
     private Vector3 moveDirection;
     private float rotationVelocity;
 
     void Start()
     {
+        playerController = GetComponent<CharacterController>();
         if (playerController == null)
         {
             Debug.LogError("CharacterController is not assigned. Please assign it in the inspector.");
@@ -26,6 +30,21 @@ public class PlayerMovement : MonoBehaviour
         {
             RotatePlayerModelToMouse();
             MovePlayer();
+            
+
+            if (isTouchingGround && Input.GetButtonDown("Jump"))
+            {
+                moveDirection.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+            }
+            else if(isTouchingGround && !Input.GetButtonDown("Jump")){
+                moveDirection.y = -1f;
+            }
+            else if (!isTouchingGround)
+            {
+                moveDirection.y += gravity * Time.deltaTime;
+            }
+
+            playerController.Move(moveDirection * Time.deltaTime);
         }
     }
 
@@ -53,10 +72,26 @@ public class PlayerMovement : MonoBehaviour
     private void MovePlayer()
     {
         float moveX = Input.GetAxis("Horizontal");
-        float moveY = Input.GetAxis("Vertical");
+        float moveZ = Input.GetAxis("Vertical");
+        Vector3 move = new Vector3(moveX, 0, moveZ);
+        move = move.normalized;
+        move *= movementSpeed;
+        moveDirection = move;
+    }
 
-        moveDirection = movementSpeed * Time.deltaTime * (moveX * Vector3.right + moveY * Vector3.forward);
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            isTouchingGround = true;
+        }
+    }
 
-        playerController.Move(moveDirection);
+    void OnCollisionExit(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            isTouchingGround = false;
+        }
     }
 }

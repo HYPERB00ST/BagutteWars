@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class Timer : MonoBehaviour
 {
-    internal float TimePassed {get; private set;}
+    internal static float TotalTimePassed {get; private set;}
     void Update()
     {
-        TimePassed += Time.deltaTime;
+        TotalTimePassed += Time.deltaTime;
+    }
+
+    void ResetTimer() {
+        TotalTimePassed = 0f;
     }
 }

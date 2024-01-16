@@ -1,18 +1,48 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class NPCCombat : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    [SerializeField] private GameObject jamObject;
+    private Vector3 JamCoords;
+    private bool jammed = false;
+    private bool jamSpawned = false;
+
+    void Update() {
+        CheckJamState();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void CheckJamState()
     {
-        
+        if (CheckJam()) {
+            if (!jamSpawned) {
+                SpawnJam();
+            }
+        }
+    }
+
+    private void SpawnJam()
+    {
+        Instantiate(jamObject, JamCoords, quaternion.identity, gameObject.transform);
+        jamSpawned = true;
+    }
+
+    private bool CheckJam()
+    {
+        if (jammed) {
+            return true;
+        }
+        return false;
+    }
+
+    internal void JamIt(Vector3 coords) {
+        Debug.Log("jammed!");
+        jammed = true;
+
+        // Debug for jam coords
+        JamCoords = transform.TransformPoint(coords);
     }
 }

@@ -84,6 +84,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isTouchingGround = true;
+            
         }
     }
 
@@ -92,6 +93,7 @@ public class PlayerMovement : MonoBehaviour
         if (collision.gameObject.tag == "Ground")
         {
             isTouchingGround = false;
+
         }
     }
 }

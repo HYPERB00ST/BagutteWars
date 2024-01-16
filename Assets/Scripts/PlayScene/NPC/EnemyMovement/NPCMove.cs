@@ -16,10 +16,7 @@ public class NPCMove : MonoBehaviour
         {
             Debug.LogError("The nav mesh agent component is not attached to " + gameObject.name);
         }
-        else
-        {
-            SetDestination();
-        }
+        SetDestination();
     }
 
     private void SetDestination()

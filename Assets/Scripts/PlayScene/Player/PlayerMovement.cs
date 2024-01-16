@@ -5,46 +5,44 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private CharacterController playerController;
+    [Header("Player")]
+    private Rigidbody playerRigidbody;
+    [SerializeField] private Transform playerCam;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSmoothTime = 0.1f;
-    [SerializeField] private float jumpHeight = 2.0f;
-    [SerializeField] private float gravity = -9.81f;
-    private bool isTouchingGround;
-
+    [Header("Dash")]
+    [SerializeField] private float dashDistance = 5f;
+    [SerializeField] private float dashDuration = 0.5f;
+    [SerializeField] private float dashCooldown = 2f;
     private Vector3 moveDirection;
     private float rotationVelocity;
+    private bool isDashing = false;
+    private float dashTimer = 0f;
 
     void Start()
     {
-        playerController = GetComponent<CharacterController>();
-        if (playerController == null)
+        playerRigidbody = GetComponent<Rigidbody>();
+        if (playerRigidbody == null)
         {
-            Debug.LogError("CharacterController is not assigned. Please assign it in the inspector.");
+            Debug.LogError("No Rigidbody component found on the player.");
         }
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        if (playerController != null)
+        if (playerRigidbody != null)
         {
-            RotatePlayerModelToMouse();
-            MovePlayer();
-            
+            /* Debug.Log("is it dashing? " + isDashing + ""); */
 
-            if (isTouchingGround && Input.GetButtonDown("Jump"))
+            if (!isDashing)
             {
-                moveDirection.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            }
-            else if(isTouchingGround && !Input.GetButtonDown("Jump")){
-                moveDirection.y = -1f;
-            }
-            else if (!isTouchingGround)
+                RotatePlayerModelToMouse();
+                MovePlayer();
+                playerRigidbody.velocity = moveDirection;
+            } else if (Input.GetKeyDown(KeyCode.Space) && !isDashing)
             {
-                moveDirection.y += gravity * Time.deltaTime;
+                StartCoroutine(Dash());
             }
-
-            playerController.Move(moveDirection * Time.deltaTime);
         }
     }
 
@@ -79,19 +77,23 @@ public class PlayerMovement : MonoBehaviour
         moveDirection = move;
     }
 
-    void OnCollisionEnter(Collision collision)
+    private IEnumerator Dash()
     {
-        if (collision.gameObject.tag == "Ground")
-        {
-            isTouchingGround = true;
-        }
-    }
+        isDashing = true;
 
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
+        Vector3 dashVelocity = moveDirection * dashDistance / dashDuration;
+        Vector3 originalVelocity = playerRigidbody.velocity;
+
+        float dashStartTime = Time.time;
+
+        while (Time.time < dashStartTime + dashDuration)
         {
-            isTouchingGround = false;
+            float ratio = (Time.time - dashStartTime) / dashDuration;
+            playerRigidbody.velocity = Vector3.Lerp(originalVelocity, dashVelocity, ratio);
+            yield return null;
         }
+
+        playerRigidbody.velocity = originalVelocity;
+        isDashing = false;
     }
 }

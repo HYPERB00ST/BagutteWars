@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Combat {
     public class PlayerCombat : MonoBehaviour {
@@ -10,6 +11,14 @@ namespace Combat {
         private Vector3 shootOrigin = new(0, 0.5f, 0);
         void Update() {
             HandleAttack();
+            TestSceneChange();// DELETE AFTER IT WORKS
+        }
+
+        private void TestSceneChange()
+        {
+            if (Stats.Points >= 50) {
+                SceneManager.LoadScene("ScoreScene");
+            }
         }
 
         private void HandleAttack()

@@ -5,18 +5,17 @@ using UnityEngine;
 public class CameraZoom : MonoBehaviour
 {
     [SerializeField] private float zoomSpeed = 2.0f;
-    
+    [Header("Min Zoom")]
     [SerializeField] private float minZoom; 
     [SerializeField] private float minZoomOut; 
     [SerializeField] private float minZoomIn;
+    [Header("Max Zoom")]
     [SerializeField] private float maxZoom; 
     [SerializeField] private float maxZoomOut; 
     [SerializeField] private float maxZoomIn;
     [SerializeField] private Camera cam;
-    
     private float defaultMinZoom;
     private float defaultMaxZoom;
-
     private void Start()
     {
         defaultMinZoom = minZoom;
@@ -25,8 +24,8 @@ public class CameraZoom : MonoBehaviour
 
     void Update()
     {
-        cam.fieldOfView -= cam.fieldOfView * zoomSpeed;
-        cam.fieldOfView = Mathf.Clamp(cam.fieldOfView, minZoom, maxZoom);
+        float targetFieldOfView = Mathf.Clamp(cam.fieldOfView, minZoom, maxZoom);
+        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView, Time.deltaTime * zoomSpeed);
     }
 
     void OnTriggerEnter(Collider other)
@@ -63,48 +62,3 @@ public class CameraZoom : MonoBehaviour
         maxZoom = newMaxZoom;
     }
 }
-
-
-/* using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class CameraZoom : MonoBehaviour
-{
-    [SerializeField] private float defaultZoom = 60f;
-    [SerializeField] private float zoomOut = 80f;
-    [SerializeField] private float zoomIn = 40f;
-    [SerializeField] private float zoomSpeed = 2.0f;
-    [SerializeField] private Camera cam;
-
-    private void Start()
-    {
-        cam.fieldOfView = defaultZoom;
-    }
-
-    void Update()
-    {
-        float targetFieldOfView = Mathf.Clamp(cam.fieldOfView, zoomIn, zoomOut);
-        cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, targetFieldOfView, Time.deltaTime * zoomSpeed);
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("ZoomIn"))
-        {
-            cam.fieldOfView = zoomIn;
-            Debug.Log("ZoomIn");
-        }
-        else if (other.gameObject.CompareTag("ZoomOut"))
-        {
-            cam.fieldOfView = zoomOut;
-            Debug.Log("ZoomOut");
-        }
-    }
-
-    void OnTriggerExit(Collider other)
-    {
-        cam.fieldOfView = defaultZoom;
-        Debug.Log("ZoomDefault");
-    }
-} */

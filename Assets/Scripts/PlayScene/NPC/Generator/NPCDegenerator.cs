@@ -16,17 +16,29 @@ public class NPCDegenerator : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     void OnTriggerEnter(Collider other) {
         Debug.Log("Trigger");
 
         // 6 is Enemy layer
         if (other.gameObject.layer == 6) {
+            HandleObjectState(other.gameObject);
             Destroy(other.gameObject);
+        }
+    }
+
+    private void HandleObjectState(GameObject other)
+    {
+        NPCCombat combat;
+        other.TryGetComponent<NPCCombat>(out combat);
+        if (combat == null) {
+            Debug.LogError("collider is not found.");
+        }
+        
+        if (combat.jamSpawned) {
+            Stats.AddPoint();
+        }
+        else {
+            Stats.RemovePoint();
         }
     }
 }

@@ -1,25 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class NPCMove : MonoBehaviour
 {
     [SerializeField] private Vector3 _destination;
 
-    UnityEngine.AI.NavMeshAgent _navMeshAgent;
+    NavMeshAgent _navMeshAgent;
 
     void Awake()
     {
-        _navMeshAgent = this.GetComponent<UnityEngine.AI.NavMeshAgent>();
-
+        TryGetComponent<NavMeshAgent>(out _navMeshAgent);
+        
         if (_navMeshAgent == null)
         {
             Debug.LogError("The nav mesh agent component is not attached to " + gameObject.name);
         }
-        else
-        {
-            SetDestination();
-        }
+        SetDestination();
     }
 
     private void SetDestination()
@@ -30,5 +28,4 @@ public class NPCMove : MonoBehaviour
             _navMeshAgent.SetDestination(_destination);
         }
     }
-
 }

@@ -5,15 +5,24 @@ using Unity.VisualScripting;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class Stats : MonoBehaviour
 {
     internal static int Points {get; private set;} = 0;
     internal static float TotalTimePassed {get; private set;} = 0f;
     internal static int Level {get; private set;} = 1;
+    internal bool inPlay = true;
+
+    void Start() {
+        DontDestroyOnLoad(this);
+    }
 
     void Update()
     {
+        if (!inPlay) {
+            return;
+        }
         TimerUpdate();
         LevelUpdate();
     }

@@ -11,7 +11,6 @@ namespace NPC.Generator {
         [SerializeField] private float baseTimeToSpawn = 10f;
         private float timePassedSinceLastSpawn = 0f;
         private float actualTimeToSpawn;
-        int level {get; set;} = 1;
         private float spawnCoords;
         [SerializeField] private float HalfSpawnWidth = 300f;
         void Start()
@@ -23,7 +22,6 @@ namespace NPC.Generator {
         void Update()
         {
             // Every 10 seconds the level increases (difficulty/spawn rate increase)
-            UpdateLevel();
             UpdateTimeToSpawn();
             
             if (CheckTimePassed()) {
@@ -33,7 +31,7 @@ namespace NPC.Generator {
 
         private void UpdateTimeToSpawn()
         {
-            actualTimeToSpawn = baseTimeToSpawn - level;
+            actualTimeToSpawn = baseTimeToSpawn - Stats.Level;
             if (actualTimeToSpawn < 2f) {
                 actualTimeToSpawn = 2f;
             } 
@@ -64,12 +62,6 @@ namespace NPC.Generator {
         private void ResetTimerToSpawn()
         {
             timePassedSinceLastSpawn = 0f;
-        }
-
-        private void UpdateLevel()
-        {
-            level = (int)Timer.TotalTimePassed / 10;
-            if (level < 1) level = 1;
         }
     }
 }

@@ -9,7 +9,7 @@ public class NPCCombat : MonoBehaviour
     [SerializeField] private GameObject jamObject;
     private Vector3 JamCoords;
     private bool jammed = false;
-    private bool jamSpawned = false;
+    internal bool jamSpawned {get; private set;} = false;
 
     void Update() {
         CheckJamState();

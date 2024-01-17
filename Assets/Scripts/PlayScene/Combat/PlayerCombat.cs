@@ -4,10 +4,10 @@ using UnityEngine;
 namespace Combat {
     public class PlayerCombat : MonoBehaviour {
         [SerializeField] private float ShootRange = 50f;
-        [SerializeField] private float testoffset = 10f;
         [SerializeField] private LayerMask EnemyLayer;
         [SerializeField] private Vector3 DebugJamCoords;
         private Vector3 shootDirection;
+        private Vector3 shootOrigin = new(0, 0.5f, 0);
         void Update() {
             HandleAttack();
         }
@@ -24,12 +24,17 @@ namespace Combat {
             RaycastHit hitInfo;
             shootDirection = transform.TransformDirection(Vector3.forward); 
             
-            bool hit = Physics.Raycast(transform.position + new Vector3(0, 0, testoffset), shootDirection, out hitInfo, ShootRange, EnemyLayer);
-            Debug.DrawRay(transform.position + new Vector3(0, 0, testoffset), shootDirection * ShootRange, Color.green, 5f);
+            bool hit = Physics.Raycast(transform.position - shootOrigin, shootDirection, out hitInfo, ShootRange, EnemyLayer);
+            Debug.DrawRay(transform.position - shootOrigin, shootDirection * ShootRange, Color.green, 5f);
 
             if (hit) {
+                NPCCombat npcC = hitInfo.collider.gameObject.GetComponent<NPCCombat>();
                 Debug.Log("hit");
-                hitInfo.collider.gameObject.GetComponent<NPCCombat>().JamIt(DebugJamCoords);
+
+                if (!npcC.jamSpawned) {
+                    npcC.JamIt(DebugJamCoords);
+                }
+                
             }
         }
     }

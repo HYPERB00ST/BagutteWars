@@ -29,24 +29,27 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (characterController != null)
+        {
             /* Debug.Log("is it dashing? " + isDashing + ""); */
 
-        if (!isDashing)
-        {
-            RotatePlayerModelToMouse();
-            MovePlayer();
-            characterController.Move(moveDirection * Time.fixedDeltaTime);
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Debug.Log("Dash!");
-            characterController.Move(moveDirection * (Time.fixedDeltaTime + dashSpeed));
-            isDashing = true;
-            dashTimer += Time.deltaTime;
-            if (dashTimer >= dashCooldown)
+            if (!isDashing)
             {
-                isDashing = false;
-                dashTimer = 0f;
+                RotatePlayerModelToMouse();
+                MovePlayer();
+                characterController.Move(moveDirection * Time.fixedDeltaTime);
+            }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Debug.Log("Dash!");
+                characterController.Move(moveDirection * (Time.fixedDeltaTime + dashSpeed));
+                isDashing = true;
+                dashTimer += Time.deltaTime;
+                if (dashTimer >= dashCooldown)
+                {
+                    isDashing = false;
+                    dashTimer = 0f;
+                }
             }
         }
     }

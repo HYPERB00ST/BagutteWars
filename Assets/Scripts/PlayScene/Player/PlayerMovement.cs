@@ -5,46 +5,49 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private CharacterController playerController;
+    [Header("Player")]
+    private CharacterController characterController;
+    [SerializeField] private Transform playerCam;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSmoothTime = 0.1f;
-    [SerializeField] private float jumpHeight = 2.0f;
-    [SerializeField] private float gravity = -9.81f;
-    private bool isTouchingGround;
-
+    [Header("Dash")]
+    [SerializeField] private float dashSpeed = 5f;
+    [SerializeField] private float dashCooldown = 2f;
     private Vector3 moveDirection;
     private float rotationVelocity;
+    private bool isDashing = false;
+    private float dashTimer = 0f;
 
     void Start()
     {
-        playerController = GetComponent<CharacterController>();
-        if (playerController == null)
+        characterController = GetComponent<CharacterController>();
+        if (characterController == null)
         {
-            Debug.LogError("CharacterController is not assigned. Please assign it in the inspector.");
+            Debug.LogError("No CharacterController component found on the player.");
         }
     }
 
-    void Update()
+    private void FixedUpdate()
     {
-        if (playerController != null)
+            /* Debug.Log("is it dashing? " + isDashing + ""); */
+
+        if (!isDashing)
         {
             RotatePlayerModelToMouse();
             MovePlayer();
-            
-
-            if (isTouchingGround && Input.GetButtonDown("Jump"))
+            characterController.Move(moveDirection * Time.fixedDeltaTime);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Dash!");
+            characterController.Move(moveDirection * (Time.fixedDeltaTime + dashSpeed));
+            isDashing = true;
+            dashTimer += Time.deltaTime;
+            if (dashTimer >= dashCooldown)
             {
-                moveDirection.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                isDashing = false;
+                dashTimer = 0f;
             }
-            else if(isTouchingGround && !Input.GetButtonDown("Jump")){
-                moveDirection.y = -1f;
-            }
-            else if (!isTouchingGround)
-            {
-                moveDirection.y += gravity * Time.deltaTime;
-            }
-
-            playerController.Move(moveDirection * Time.deltaTime);
         }
     }
 
@@ -77,23 +80,5 @@ public class PlayerMovement : MonoBehaviour
         move = move.normalized;
         move *= movementSpeed;
         moveDirection = move;
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            isTouchingGround = true;
-            
-        }
-    }
-
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Ground")
-        {
-            isTouchingGround = false;
-
-        }
     }
 }

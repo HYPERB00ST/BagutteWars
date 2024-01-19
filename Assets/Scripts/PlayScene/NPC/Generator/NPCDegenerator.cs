@@ -5,14 +5,20 @@ using UnityEngine;
 
 public class NPCDegenerator : MonoBehaviour
 {
-    // Start is called before the first frame update
+
     private new Collider collider;
+    private Stats statsRef;
     void Start()
     {
         gameObject.TryGetComponent<Collider>(out collider);
         if (collider == null)
         {
-            Debug.LogError("collider is not found.");
+            Debug.LogError("NPCDeg/collider is missing.");
+        }
+
+        GameObject.Find("Stats").TryGetComponent<Stats>(out statsRef);
+        if (statsRef == null) {
+            Debug.LogError("NPCDeg/statsRef is missing.");
         }
     }
 
@@ -35,10 +41,10 @@ public class NPCDegenerator : MonoBehaviour
         }
         
         if (combat.jamSpawned) {
-            Stats.AddPoint();
+            statsRef.AddPoint();
         }
         else {
-            Stats.RemovePoint();
+            statsRef.ShortenTimeToPlay();
         }
     }
 }

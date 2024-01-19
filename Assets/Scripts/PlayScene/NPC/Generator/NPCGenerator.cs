@@ -15,26 +15,31 @@ namespace NPC.Generator {
         [SerializeField] private float HalfSpawnWidth = 300f;
         void Start()
         {
-            
+            StartCoroutine(GenerateNPCs());
         }
 
-        // Update is called once per frame
-        void Update()
-        {
-            // Every 10 seconds the level increases (difficulty/spawn rate increase)
+        void Update() {
             UpdateTimeToSpawn();
-            
-            if (CheckTimePassed()) {
-                SpawnNPC();
+        }
+
+        IEnumerator GenerateNPCs()
+        {
+            while (true) {
+                if (CheckTimePassed()) {
+                    SpawnNPC();
+                    yield return new WaitForSeconds(actualTimeToSpawn);
+                }
+                yield return null;
             }
         }
 
         private void UpdateTimeToSpawn()
         {
+            // Every 10 seconds the level increases (difficulty/spawn rate increase)
             actualTimeToSpawn = baseTimeToSpawn - Stats.Level;
             if (actualTimeToSpawn < 2f) {
                 actualTimeToSpawn = 2f;
-            } 
+            }
         }
 
         private void SpawnNPC()

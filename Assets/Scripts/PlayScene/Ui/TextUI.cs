@@ -34,7 +34,7 @@ public class TextUI : MonoBehaviour
 
     private void UpdateTimeUI()
     {
-        timeText.text = baseTimeText + Stats.TotalTimePassed.ToString();
+        timeText.text = baseTimeText + Stats.TimeToPlay.ToString();
     }
 
     private void UpdateScoreUI()

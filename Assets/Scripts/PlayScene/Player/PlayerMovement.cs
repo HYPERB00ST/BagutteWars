@@ -6,13 +6,12 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Player")]
-    private Rigidbody playerRigidbody;
+    private CharacterController characterController;
     [SerializeField] private Transform playerCam;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float rotationSmoothTime = 0.1f;
     [Header("Dash")]
-    [SerializeField] private float dashDistance = 5f;
-    [SerializeField] private float dashDuration = 0.5f;
+    [SerializeField] private float dashSpeed = 5f;
     [SerializeField] private float dashCooldown = 2f;
     private Vector3 moveDirection;
     private float rotationVelocity;
@@ -21,27 +20,33 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
-        playerRigidbody = GetComponent<Rigidbody>();
-        if (playerRigidbody == null)
+        characterController = GetComponent<CharacterController>();
+        if (characterController == null)
         {
-            Debug.LogError("No Rigidbody component found on the player.");
+            Debug.LogError("No CharacterController component found on the player.");
         }
     }
 
     private void FixedUpdate()
     {
-        if (playerRigidbody != null)
-        {
             /* Debug.Log("is it dashing? " + isDashing + ""); */
 
-            if (!isDashing)
+        if (!isDashing)
+        {
+            RotatePlayerModelToMouse();
+            MovePlayer();
+            characterController.Move(moveDirection * Time.fixedDeltaTime);
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Debug.Log("Dash!");
+            characterController.Move(moveDirection * (Time.fixedDeltaTime + dashSpeed));
+            isDashing = true;
+            dashTimer += Time.deltaTime;
+            if (dashTimer >= dashCooldown)
             {
-                RotatePlayerModelToMouse();
-                MovePlayer();
-                playerRigidbody.velocity = moveDirection;
-            } else if (Input.GetKeyDown(KeyCode.Space) && !isDashing)
-            {
-                StartCoroutine(Dash());
+                isDashing = false;
+                dashTimer = 0f;
             }
         }
     }
@@ -75,25 +80,5 @@ public class PlayerMovement : MonoBehaviour
         move = move.normalized;
         move *= movementSpeed;
         moveDirection = move;
-    }
-
-    private IEnumerator Dash()
-    {
-        isDashing = true;
-
-        Vector3 dashVelocity = moveDirection * dashDistance / dashDuration;
-        Vector3 originalVelocity = playerRigidbody.velocity;
-
-        float dashStartTime = Time.time;
-
-        while (Time.time < dashStartTime + dashDuration)
-        {
-            float ratio = (Time.time - dashStartTime) / dashDuration;
-            playerRigidbody.velocity = Vector3.Lerp(originalVelocity, dashVelocity, ratio);
-            yield return null;
-        }
-
-        playerRigidbody.velocity = originalVelocity;
-        isDashing = false;
     }
 }

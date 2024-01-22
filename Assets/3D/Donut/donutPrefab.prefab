@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 2259017556293537551}
   - component: {fileID: 2951687252783153322}
   - component: {fileID: 1086080693880009824}
-  - component: {fileID: 7088105268078029131}
   - component: {fileID: 2496755970626183973}
+  - component: {fileID: 1142260380269898924}
   m_Layer: 0
   m_Name: donutPrefab
   m_TagString: Untagged
@@ -85,8 +85,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &7088105268078029131
-BoxCollider:
+--- !u!208 &2496755970626183973
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446346880774510005}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 0
+  m_Extents: {x: 0.16600001, y: 0.177, z: 0.16600001}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: -0.001, y: -0.001, z: 0.061000004}
+  m_TimeToStationary: 0.5
+--- !u!64 &1142260380269898924
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -103,22 +119,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.3322591, y: 0.35361347, z: 0.12544917}
-  m_Center: {x: -0.00061123073, y: -0.0009939598, z: 0.06072896}
---- !u!208 &2496755970626183973
-NavMeshObstacle:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1446346880774510005}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Shape: 1
-  m_Extents: {x: 0.16600001, y: 0.177, z: 0.063}
-  m_MoveThreshold: 0.1
-  m_Carve: 1
-  m_CarveOnlyStationary: 1
-  m_Center: {x: -0.001, y: -0.001, z: 0.061000004}
-  m_TimeToStationary: 0.5
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 2657644259874368674, guid: c929a5265d71e3f4cb8a0b284d2c834c, type: 3}

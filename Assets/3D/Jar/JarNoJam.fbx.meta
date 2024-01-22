@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: 52d91ac71d3005947b5a2bc2d6164cba
+guid: 9e443cdeecc31c0448059cdfaa1931bf
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: glass
-    second: {fileID: 2100000, guid: 8ea0372cc45cec44aae4c7b12defe262, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: jam
-    second: {fileID: 2100000, guid: 4ceb53c411a8dff43ac031654b423706, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -100,7 +90,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.01
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

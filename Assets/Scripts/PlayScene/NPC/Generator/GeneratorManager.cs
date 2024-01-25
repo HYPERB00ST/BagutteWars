@@ -7,6 +7,7 @@ namespace NPC.Generator {
     class GeneratorManager : MonoBehaviour {
         [SerializeField]
         private GameObject[] NPCSpawners;
+        [SerializeField]
         private Vector3[] SpawnerCoords;
         private const int MAX_SPAWNER_AMOUNT = 2;
         private int nextSpawner = 0;

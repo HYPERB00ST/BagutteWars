@@ -169,7 +169,7 @@ namespace Combat {
 
         private void HandleReload()
         {
-            if (ammoActual <= 0 || Input.GetAxis("Fire2") > 0) {
+            if (ammoActual <= 0 || Input.GetAxis("Fire2") > 0 || Input.GetKeyDown("r")) {
                 //Debug.Log("Started reloading!");
                 isReloading = true;
                 KnifeJam.SetActive(false);
@@ -196,6 +196,9 @@ namespace Combat {
 
         internal int GetCurrentAmmo() {
             return ammoActual;
+        }
+        internal bool GetReloadStatus() {
+            return isReloading;
         }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +17,13 @@ public class SceneChanger : MonoBehaviour
     private void HandleSceneChange()
     {
         if (Stats.PlayTime <= 0f) {
+            TakeScreenshot();
             SceneManager.LoadScene("ScoreScene");
         }
+    }
+
+    private void TakeScreenshot()
+    {
+        ScreenCapture.CaptureScreenshot("Assets/Endscreen.png");
     }
 }

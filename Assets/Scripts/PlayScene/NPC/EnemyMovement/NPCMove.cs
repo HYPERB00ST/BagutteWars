@@ -5,16 +5,13 @@ using UnityEngine.Animations.Rigging;
 public class NPCMove : MonoBehaviour
 {
     [SerializeField] private string KidPrefabName = "ToastDestination";
-    [SerializeField] private float TimeToJump = 5f;
-    private float forwardOffset = 5f;
+    [SerializeField] private float forwardOffset = 5f;
     private Transform DespawnerTransform;
     private Transform MovingDestination;
     private NavMeshAgent _navMeshAgent;
     private Animator _animator;
     private Rigidbody _rigidbody;
-    private Vector3 startingJumpPosition;
     private Vector3 endingJumpPosition;
-    private float jumpAngle = 0f;
     private bool havePositions = false;
 
     void Awake()
@@ -52,25 +49,25 @@ public class NPCMove : MonoBehaviour
 
     private void SavePositions()
     {
-        startingJumpPosition = transform.position;
         endingJumpPosition = DespawnerTransform.position;
-        transform.LookAt(endingJumpPosition);
         
         havePositions = true;
     }
 
     private void ArcJump()
     {   
-        float radius = Vector3.Distance(startingJumpPosition, endingJumpPosition) / 2;
+        transform.LookAt(endingJumpPosition);
+        transform.Translate(-transform.forward * forwardOffset * Time.deltaTime);
+        // float radius = Vector3.Distance(startingJumpPosition, endingJumpPosition) / 2;
         // Vector3 center = new Vector3((startingJumpPosition.x + endingJumpPosition.x)/2, 
         //     (startingJumpPosition.y + endingJumpPosition.y)/2, (startingJumpPosition.z + endingJumpPosition.z)/2);
 
-        jumpAngle += Mathf.PI / TimeToJump * Time.deltaTime;
+        // jumpAngle += Mathf.PI / TimeToJump * Time.deltaTime;
 
-        Vector3 finalMove = (-transform.forward * Mathf.Cos(jumpAngle) * forwardOffset + 
-            transform.up * Mathf.Sin(jumpAngle)) * radius; // I dont know why -forward, but it works
+        // Vector3 finalMove = (transform.forward * Mathf.Cos(jumpAngle) + 
+        //     transform.up * Mathf.Sin(jumpAngle)) * radius; // I dont know why -forward, but it works
 
-        transform.Translate(finalMove * Time.deltaTime);
+        // transform.Translate(finalMove * Time.deltaTime);
     }
 
 

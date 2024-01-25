@@ -1,9 +1,12 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections.Generic;
+using System.IO;
 
 public class SceneChanger : MonoBehaviour
 {
-    // Update is called once per frame
+    List<Match> matches = new List<Match>();
+
     void Update()
     {
         HandleSceneChange();
@@ -12,6 +15,9 @@ public class SceneChanger : MonoBehaviour
     private void HandleSceneChange()
     {
         if (Stats.TimeToPlay <= 0f) {
+            matches.Add(new Match(Stats.Level, Stats.Points, System.DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
+            string json = JsonUtility.ToJson(matches.ToArray(), true);
+            File.WriteAllText(Application.dataPath + "/matches.json", json);
             SceneManager.LoadScene("ScoreScene");
         }
     }

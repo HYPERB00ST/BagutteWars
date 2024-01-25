@@ -10,6 +10,12 @@ public class NPCCombat : MonoBehaviour
     private Vector3 JamCoords;
     private bool jammed = false;
     internal bool jamSpawned {get; private set;} = false;
+    private GameObject JamToast;
+
+    void Awake() {
+        JamToast = transform.GetChild(0).GetChild(1).gameObject;
+        JamToast.SetActive(false);
+    }
 
     void Update() {
         CheckJamState();
@@ -26,7 +32,9 @@ public class NPCCombat : MonoBehaviour
 
     private void SpawnJam()
     {
-        Instantiate(jamObject, JamCoords, quaternion.identity, gameObject.transform);
+        //Instantiate(jamObject, JamCoords, quaternion.identity, gameObject.transform);
+
+        JamToast.SetActive(true);
         jamSpawned = true;
     }
 

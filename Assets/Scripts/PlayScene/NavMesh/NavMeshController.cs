@@ -7,7 +7,7 @@ public class NavMeshManager : MonoBehaviour
 {
     private NavMeshSurface surface;
 
-    void Start()
+    void Awake()
     {
         gameObject.TryGetComponent<NavMeshSurface>(out surface);
         if (surface == null) {

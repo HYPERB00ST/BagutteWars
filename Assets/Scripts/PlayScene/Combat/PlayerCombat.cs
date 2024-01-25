@@ -13,6 +13,7 @@ namespace Combat {
         [SerializeField] private int maxAmmoAmount = 3;
 
         private PlayAnimationManager playerAnim;
+        private GameObject KnifeJam;
         
         // Actual amount of ammo
         private int ammoActual;
@@ -39,6 +40,7 @@ namespace Combat {
         void Start() {
             ammoActual = maxAmmoAmount;
             playerAnim = gameObject.GetComponent<PlayAnimationManager>();
+            KnifeJam = transform.GetChild(0).GetChild(2).gameObject;
         }
         
         void Update() {
@@ -84,7 +86,7 @@ namespace Combat {
 
             if (isReloading) {
                 reloadTimer.AddTime(Time.deltaTime);
-                Debug.Log(reloadTimer.timePassed);
+                //Debug.Log(reloadTimer.timePassed);
                 
                 if (reloadTimer.timePassed >= reloadTime) {
                     //Debug.Log("Ended Reload!");
@@ -92,6 +94,8 @@ namespace Combat {
                     isReloading = false;
                     ResetAmmo();
                     reloadTimer.Reset();
+                    
+                    KnifeJam.SetActive(true);
                 }
             }
         }
@@ -168,6 +172,7 @@ namespace Combat {
             if (ammoActual <= 0 || Input.GetAxis("Fire2") > 0) {
                 //Debug.Log("Started reloading!");
                 isReloading = true;
+                KnifeJam.SetActive(false);
             }
         }
 

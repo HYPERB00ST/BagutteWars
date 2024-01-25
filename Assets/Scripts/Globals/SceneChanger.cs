@@ -3,6 +3,10 @@ using UnityEngine.SceneManagement;
 
 public class SceneChanger : MonoBehaviour
 {
+    void Start() {
+        Application.targetFrameRate = 60;
+    }
+   
     // Update is called once per frame
     void Update()
     {
@@ -11,7 +15,7 @@ public class SceneChanger : MonoBehaviour
 
     private void HandleSceneChange()
     {
-        if (Stats.TimeToPlay <= 0f) {
+        if (Stats.PlayTime <= 0f) {
             SceneManager.LoadScene("ScoreScene");
         }
     }

@@ -2,11 +2,13 @@ using UnityEngine;
 
 public class Stats : MonoBehaviour
 {
-    [SerializeField] private float StartingTomeToPlay = 60f;
-    [SerializeField] private float SecondsPerToast = 6f;
+    [SerializeField] private const float BASE_PLAY_TIME = 60f;
+    [SerializeField] private const float TIME_PER_TOAST = 6f;
+    private const int MAX_LEVEL = 11;
+    private const int TIME_TO_LEVEL = 10;
 
     // Static stats
-    internal static float TimeToPlay;
+    internal static float PlayTime;
     internal static int Points {get; private set;} = 0;
     internal static float TotalTimePassed {get; private set;} = 0f;
     internal static int Level {get; private set;} = 1;
@@ -15,7 +17,7 @@ public class Stats : MonoBehaviour
     internal bool inPlay = true;
 
     void Start() {
-        TimeToPlay = StartingTomeToPlay;
+        PlayTime = BASE_PLAY_TIME;
         DontDestroyOnLoad(this);
     }
 
@@ -31,7 +33,7 @@ public class Stats : MonoBehaviour
 
     private void TimeToPlayUpdate()
     {
-        TimeToPlay -= Time.deltaTime;
+        PlayTime -= Time.deltaTime;
     }
 
     private void TimerUpdate()
@@ -46,11 +48,16 @@ public class Stats : MonoBehaviour
 
     void ResetScore() {
         // TODO: Call on main menu
+        Points = 0;
     }
 
     private void LevelUpdate()
     {
-        Level = (int)TotalTimePassed / 10;
+        if (Level >= MAX_LEVEL) {
+            Level = MAX_LEVEL;
+            return;
+        }
+        Level = (int)TotalTimePassed / TIME_TO_LEVEL;
         if (Level < 1) Level = 1;
     }
 
@@ -61,10 +68,10 @@ public class Stats : MonoBehaviour
 
     private void ExtendTimeToPlay()
     {
-        TimeToPlay += SecondsPerToast;
+        PlayTime += TIME_PER_TOAST;
     }
 
     internal void ShortenTimeToPlay() {
-        TimeToPlay -= SecondsPerToast;
+        PlayTime -= TIME_PER_TOAST * 2;
     }
 }
